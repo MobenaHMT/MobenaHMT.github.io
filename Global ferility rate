@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Global fertility rate",
+    "subtitle": [
+      "Fertility rate: percentage",
+      ""
+    ],
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "subtitleFontWeight": "lighter",
+    "anchor": "middle"
+  },
+  "description": "2021 World Bank data, GDP per capita in current international $ and converted to purchasing power parity. Grey countries have missing data.",
+  //Map countor URL//
+  "data": {
+    "url": "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/datasets/advanced/map_world.geojson",
+    "format": {"property": "features"}
+  },
+  "width": 600,
+  "height": 330,
+  "transform": [
+    {
+      "lookup": "properties.ISO3",
+      "from": {
+        "key": "ISO3",
+        "fields": ["Country", "value"],
+        //Data URL//
+       "data": {
+          "url": "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/4/map_data/world_fertility_rate_wb.csv"
+        }
+      }
+    }
+  ],
+  "projection": {
+    "type": "naturalEarth1",
+    "scale": 125,
+    "translate": [285, 180]
+  },
+  "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.3},
+  "encoding": {
+    "color": {
+      "condition": {"value": "lightgrey", "test": "!datum['value']"},
+      "field": "value",
+      "type": "quantitative",
+      "legend": {"title": "", "format": "$,d"},
+      "scale": {"type": "log", "scheme": "viridis", "reverse": false}
+    },
+    "tooltip": [
+      {"field": "Country", "title": "Country"},
+      {"field": "value", "title": "Fertility Rate (%)"}
+    ]
+  }
+}
